@@ -3,3 +3,5 @@ development:
   theme_id: "161032526"
   store: almost-peggy.myshopify.com
   timeout: 30s
+  :ignore_files:
+- config/settings_data.json
