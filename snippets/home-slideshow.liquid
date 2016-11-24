@@ -1,0 +1,74 @@
+<div class="home-slideshow-wrapper {{ settings.slideshow-layout }} {{ settings.slideshow-transition }}">
+  <div class="home-slideshow-loader"></div>
+
+  {% assign slideCount = 0 %}
+  {% for i in (1..5) %}
+    {% capture slide %}show-slide-{{ i }}{% endcapture %}
+    {% if settings[slide] %}
+      {% assign slideCount = slideCount | plus: 1 %}
+    {% endif %}
+  {% endfor %}
+
+  {% if slideCount > 1 %}
+    <div class="home-slideshow-navigation home-slideshow-previous icon">&#57352;</div>
+    <div class="home-slideshow-navigation home-slideshow-next icon">&#57353;</div>
+  {% endif %}
+
+  {% if slideCount > 1 %}
+    <div class="home-slideshow-pagination">
+      {% for i in (1..5) %}
+        {% capture slide %}show-slide-{{ i }}{% endcapture %}
+        {% if settings[slide] %}
+          <span data-slide-id="home-slide-{{ i }}" class="pagination-slide-{{ i }}"><span></span></span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="home-slideshow">
+
+    {% assign slideCount = 0 %}
+    {% for i in (1..5) %}
+      {% capture slide %}show-slide-{{ i }}{% endcapture %}
+      {% if settings[slide] %}
+        {% capture slideCTA %}slide-{{ i }}-cta{% endcapture %}
+        {% capture slideURL %}slide-{{ i }}-url{% endcapture %}
+        {% capture slideTitle %}slide-{{ i }}-title{% endcapture %}
+        {% capture slideSubtitle %}slide-{{ i }}-subtitle{% endcapture %}
+        {% capture slideSmallText %}slide-{{ i }}-small-text{% endcapture %}
+        {% capture slideTextAlignment %}slide-{{ i }}-text-alignment{% endcapture %}
+        {% capture slideImage %}slide-{{ i }}-image.jpg{% endcapture %}
+
+        <div id="home-slide-{{ i }}" class="home-slide home-slide-{{ i }} text-aligned-{{ settings[slideTextAlignment] }}" {% if settings.slideshow-layout == 'opening-screen' %}style="background-image: url({{ slideImage | asset_url }});"{% endif %}>
+
+          {% if settings[slideCTA] != blank and settings[slideURL] != blank %}<a href="{{ settings[slideURL] }}">{% endif %}
+            <img class="slide-image" alt="{{ settings[slideTitle] | strip_html | escape }}" src="{{ slideImage | asset_url }}">
+          {% if settings[slideCTA] != blank and settings[slideURL] != blank %}</a>{% endif %}
+
+            {% if settings[slideTitle] != blank or settings[slideSubtitle] != blank or settings[slideSmallText] != blank or settings[slideCTA] != blank %}
+              {% if settings[slideCTA] == blank and settings[slideURL] != blank %}<a href="{{ settings[slideURL] }}">{% endif %}
+                <div class="slide-text {% if settings.slideshow-text-shadows %}slide-text-use-shadows{% endif %}">
+                  {% if settings[slideTitle] != blank %}
+                    <h2>{{ settings[slideTitle] }}</h2>
+                  {% endif %}
+
+                  {% if settings[slideSubtitle] != blank %}
+                    <h3>{{ settings[slideSubtitle] }}</h3>
+                  {% endif %}
+
+                  {% if settings[slideSmallText] != blank %}
+                    <p>{{ settings[slideSmallText] }}</p>
+                  {% endif %}
+
+                  {% if settings[slideCTA] != blank and settings[slideURL] != blank %}
+                    <a class="button" href="{{ settings[slideURL] }}">{{ settings[slideCTA] }}</a>
+                  {% endif %}
+                </div>
+              {% if settings[slideCTA] == blank and settings[slideURL] != blank %}</a>{% endif %}
+            {% endif %}
+
+          </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

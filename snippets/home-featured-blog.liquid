@@ -1,0 +1,23 @@
+<div class="home-module-wrapper {{ settings.home-featured-blog-style }} rows-of-2">
+  <div class="home-module home-featured-blog">
+
+    {% if settings.home-featured-blog-title != blank %}
+      <h3 class="section-title">{{ settings.home-featured-blog-title }}</h3>
+    {% endif %}
+
+    {% for article in blogs[settings.home-featured-blog].articles limit: 2 %}
+      <article class="home-featured-blog-post">
+        <h4 class="featured-post-title"><a href="{{ article.url }}">{{ article.title }}</a></h4>
+        <p class="featured-post-date"><a href="{{ article.url }}">{{ article.published_at | date: format: 'long_month' }}</a></p>
+        {% if article.image %}
+          <a class="featured-post-image" href="{{ article.url }}">
+            <img src="{{ article.image | img_url: 'grande' }}" alt="{{ article.title }}">
+          </a>
+        {% endif %}
+
+        <p class="featured-post-excerpt">{{ article.excerpt_or_content | strip_html }}</p>
+      </article>
+    {% endfor %}
+
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<script type="text/javascript">
+  Theme = {}
+  Theme.version = "6.1.5";
+  Theme.logo = {{ settings.use-logo }};
+  Theme.currency = '{{ shop.currency }}';
+  shopCurrency = '{{ shop.currency }}'; /* used by shipping calculator */
+  Theme.moneyFormat = {{ shop.money_format | strip_html | json }};
+  Theme.moneyFormatCurrency = {{ shop.money_with_currency_format | strip_html | json }};
+
+  Theme.quickAdd = {{ settings.product-quick-add | json }};
+
+  Theme.addToCartText = "{{ 'products.product.add_to_cart' | t | replace: '"','\\"' }}";
+
+  {% if template contains 'index' and settings.home-order-now-enable-express %}
+    {% if settings.product-quick-add %}
+      Theme.addToCartText = "{{ 'products.product.buy_now' | t | replace: '"','\\"' }}";
+    {% endif %}
+  {% endif %}
+
+  Theme.soldOutText = "{{ 'products.product.sold_out' | t | replace: '"','\\"' }}";
+  Theme.unavailableText = "{{ 'products.product.unavailable' | t | replace: '"','\\"' }}";
+  Theme.processingText = "{{ 'products.product.processing' | t | replace: '"','\\"' }}";
+  Theme.setQuantityText = "{{ 'products.product.set_quantity' | t | replace: '"','\\"' }}";
+
+  Theme.notAvailableText = "{{ 'cart.general.not_available' | t | replace: '"','\\"' }}";
+  Theme.stockLevelText = "{{ 'cart.general.stock_level' | t: stock_count: '** stock_count **' | replace: '"','\\"' }}";
+  Theme.okayText = "{{ 'cart.general.okay' | t | replace: '"','\\"' }}";
+  Theme.shippingCalcErrorMessage = "{{ 'cart.shipping_calculator.error' | t: error_message: '** error_message **' | replace: '"','\\"' }}";
+  Theme.shippingCalcMultiRates = "{{ 'cart.shipping_calculator.rates_html' | t: address: '** address **', number_of_rates: '** number_of_rates **', rate: '** rate **' | replace: '"','\\"' }}";
+  Theme.shippingCalcOneRate = "{{ 'cart.shipping_calculator.rate' | t: address: '** address **' | replace: '"','\\"' }}";
+  Theme.shippingCalcNoRates = "{{ 'cart.shipping_calculator.no_rates' | t | replace: '"','\\"' }}";
+  Theme.shippingCalcRateValues = "{{ 'cart.shipping_calculator.rate_values_html' | t: rate_title: '** rate_title **', rate: '** rate **' | replace: '"','\\"' }}";
+
+  {% if shop.customer_accounts_enabled and customer %}
+  Theme.customerLoggedIn = true;
+  {% endif %}
+
+  {% if settings.header-navigation-location == 'header' %}
+  Theme.headerNavigation = true;
+  {% endif %}
+
+  {% if settings.header-sticky %}
+  Theme.headerSticky = true;
+  {% endif %}
+
+  {% if settings.product-enable-zoom %}
+  Theme.imageZoom = true;
+  {% endif %}
+
+  {% if settings.product-linked-options %}
+  Theme.linkedOptions = true;
+  {% endif %}
+
+  {% if settings.show-shipping-calculator %}
+  Theme.shippingCalculator = true;
+  Theme.customerCountry = '{% if shop.customer_accounts_enabled and customer %}{{ customer.default_address }}{% endif %}';
+  Theme.shippingSubmit = "{{ 'cart.shipping_calculator.submit' | t | replace: '"','\\"' }}";
+  Theme.shippingWorking = "{{ 'cart.shipping_calculator.working' | t | replace: '"','\\"' }}";
+  {% endif %}
+
+  {% if template contains 'index' %}
+    {% if settings.slideshow-autoplay %}
+      Theme.slideshowAutoplay = true;
+      Theme.slideshowAutoplayDelay = 4;
+
+      {% if settings.slideshow-autoplay-delay.size > 0 %}
+        Theme.slideshowAutoplayDelay = parseInt('{{ settings.slideshow-autoplay-delay }}',10);
+      {% endif %}
+    {% endif %}
+  {% elsif template contains 'product.slideshow' %}
+    {% if settings.product-slideshow-autoplay %}
+      Theme.slideshowAutoplay = true;
+      Theme.slideshowAutoplayDelay = 4;
+
+      {% if settings.product-slideshow-autoplay-delay.size > 0 %}
+        Theme.slideshowAutoplayDelay = parseInt('{{ settings.product-slideshow-autoplay-delay }}',10);
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  {% if settings.show-currency-switcher %}
+  Theme.currencySwitcher = true
+    {% if settings.currency-switcher-format %}
+    Theme.currencySwitcherFormat = '{{ settings.currency-switcher-format }}';
+    Theme.moneyFormat = {{ shop.[settings.currency-switcher-format] | json }};
+    {% endif %}
+
+    {% if settings.currency-switcher-default.size > 0 %}
+    Theme.defaultCurrency = '{{ settings.currency-switcher-default }}';
+    {% endif %}
+  {% endif %}
+
+  {% assign homeModules = '' %}
+  {% for i in (1..10) %}
+    {% capture module %}home-module-{{ i }}{% endcapture %}
+    {% unless settings[module] == 'none' or homeModules contains settings[module] %}
+      {% capture homeModules %}{{ homeModules }}-{{ settings[module] }}{% endcapture %}
+    {% endunless %}
+  {% endfor %}
+
+  {% if homeModules contains 'J' %}
+  Theme.showInstagramWidget = true;
+  Theme.instagramAccessToken = '{{ settings.home-instagram-access-token | escape }}';
+  Theme.showInstagramTag = {{ settings.display-instagram-tag | json }};
+  Theme.instagramTag = '{{ settings.instagram-tag | escape }}';
+  {% endif %}
+</script>

@@ -1,0 +1,100 @@
+<div class="home-module-wrapper {{ settings.home-left-right-style }} {% if settings.home-left-right-borders %}borders{% endif %}">
+  <div class="home-module home-left-right-features">
+    {% if settings.home-left-right-heading != blank %}
+      <h3 class="section-title">{{ settings.home-left-right-heading }}</h3>
+    {% else %}
+      {% unless settings.home-show-left-right-1 or settings.home-show-left-right-2 or settings.home-show-left-right-3 %}
+        <h3 class="section-title">{{ 'onboarding.alternating_features_section.section_title' | t }}</h3>
+      {% endunless %}
+    {% endif %}
+
+    <div class="fix-for-first-child">
+
+      {% for i in (1..3) %}
+        {% capture feature %}home-show-left-right-{{ i }}{% endcapture %}
+        {% if settings[feature] %}
+
+          {% capture mediaAlignment %}home-left-right-{{ i }}-media-alignment{% endcapture %}
+          {% capture media %}home-left-right-{{ i }}-media{% endcapture %}
+          {% capture heading %}home-left-right-{{ i }}-title{% endcapture %}
+          {% capture caption %}home-left-right-{{ i }}-text{% endcapture %}
+          {% capture url %}home-left-right-{{ i }}-url{% endcapture %}
+          {% capture cta %}home-left-right-{{ i }}-cta{% endcapture %}
+          {% capture image %}home-left-right-image-{{ i }}.jpg{% endcapture %}
+          {% capture video %}home-left-right-{{ i }}-video{% endcapture %}
+
+          <div class="home-left-right-feature clearfix media-aligned-{{ settings[mediaAlignment] }}">
+
+            {% if settings[mediaAlignment] == 'left' %}
+              <div class="home-left-right-media">
+                {% if settings[media] == 'image' %}
+                  <img alt="{{ settings[heading] | strip_html | escape }}" src="{{ image | asset_url }}">
+                {% elsif settings[media] == 'video' %}
+                  <div class="home-left-right-video">{{ settings[video] }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            <div class="home-left-right-text">
+              {% if settings[heading] != blank %}
+                <h3>{{ settings[heading] }}</h3>
+              {% endif %}
+              <div class="rte">
+                {{ settings[caption] }}
+
+                {% if settings[url] != blank and settings[cta] != blank %}
+                  <p class="home-left-right-cta"><a href="{{ settings[url] }}">{{ settings[cta] }}</a></p>
+                {% endif %}
+              </div>
+            </div>
+
+            {% if settings[mediaAlignment] == 'right' %}
+              <div class="home-left-right-media">
+                {% if settings[media] == 'image' %}
+                  <img alt="{{ settings[heading] | strip_html | escape }}" src="{{ image | asset_url }}">
+                {% elsif settings[media] == 'video' %}
+                  <div class="home-left-right-video">{{ settings[video] }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% unless settings.home-show-left-right-1 or settings.home-show-left-right-2 or settings.home-show-left-right-3 %}
+        <div class="home-left-right-feature clearfix media-aligned-right">
+
+          <div class="home-left-right-text">
+            <h3>{{ 'onboarding.alternating_features_section.feature_title' | t }}</h3>
+            <div class="rte">
+              {{ 'onboarding.alternating_features_section.text' | t }}
+              <p class="home-left-right-cta"><a href="{{ shop.url }}/admin/themes">{{ 'onboarding.theme_settings_link' | t }}</a></p>
+            </div>
+          </div>
+
+          <div class="home-left-right-media">
+            <img class="home-helper-image" alt="" src="{{ 'no-image.svg' | asset_url }}" onerror="this.src='{{'no-image.png' | asset_url}}';this.onerror=null;">
+          </div>
+
+        </div>
+
+        <div class="home-left-right-feature clearfix media-aligned-left">
+
+          <div class="home-left-right-media">
+            <img class="home-helper-image" alt="" src="{{ 'no-image.svg' | asset_url }}" onerror="this.src='{{'no-image.png' | asset_url}}';this.onerror=null;">
+          </div>
+
+          <div class="home-left-right-text">
+            <h3>{{ 'onboarding.alternating_features_section.feature_title' | t }}</h3>
+            <div class="rte">
+              {{ 'onboarding.alternating_features_section.text' | t }}
+              <p class="home-left-right-cta"><a href="{{ shop.url }}/admin/themes">{{ 'onboarding.theme_settings_link' | t }}</a></p>
+            </div>
+          </div>
+
+        </div>
+      {% endunless %}
+
+    </div>
+  </div>
+</div>

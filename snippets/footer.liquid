@@ -1,0 +1,133 @@
+{% unless template contains 'index' %}
+  {% if settings.display-mailing-list %}
+    {% include 'mailing-list' %}
+  {% endif %}
+{% endunless %}
+
+{% assign borderClass = '' %}
+{% if settings.background-color == settings.footer-background-color %}
+  {% unless settings.body-background-use-image or settings.footer-background-use-image %}
+    {% assign borderClass = 'default' %}
+  {% endunless %}
+{% endif %}
+
+<div class="footer-wrapper {{ borderClass }}">
+
+  {% assign linkListClass = 0 %}
+
+  {% if linklists[settings.footer-link-list-1].links.size > 0 %}
+    {% assign linkListClass = linkListClass | plus: 1 %}
+  {% endif %}
+  {% if linklists[settings.footer-link-list-2].links.size > 0 %}
+    {% assign linkListClass = linkListClass | plus: 1 %}
+  {% endif %}
+  {% if settings.social-facebook-url != blank or settings.social-twitter-url != blank or settings.social-google-plus-url != blank or settings.social-instagram-url != blank or settings.social-pinterest-url != blank or settings.social-vimeo-url != blank or settings.social-youtube-url != blank or settings.social-rss-url != blank %}
+    {% assign hasSocial = true %}
+    {% assign linkListClass = linkListClass | plus: 1 %}
+  {% endif %}
+
+  <footer class="main-footer showing-{{linkListClass}}-lists">
+
+    {% for i in (1..2) %}
+      {% capture linkList %}footer-link-list-{{ i }}{% endcapture %}
+      {% if linklists[settings[linkList]].links.size > 0 %}
+        {% capture menu %}{{ settings[linkList] }}{% endcapture %}
+        <div class="footer-link-list {{ linklists[menu].handle }}">
+          {% if settings.footer-show-headers %}
+            <h4>{{ linklists[menu].title }}</h4>
+          {% endif %}
+
+          <ul>
+            {% for link in linklists[menu].links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% if hasSocial %}
+      {% include 'social-icons' %}
+    {% endif %}
+
+    {% if settings.show-share-buttons %}
+    <div class="spread-the-word">
+      {% if settings.footer-show-headers %}
+        <h4>{{ 'general.social.share_title' | t }}</h4>
+      {% endif %}
+
+      {% capture byline %}{{ 'general.social.byline' | t }}{% endcapture %}
+      {% if byline != blank %}
+        <p>{{ 'general.social.byline' | t }}</p>
+      {% endif %}
+
+      {% if settings.footer-show-pin %}
+        {% assign pinterestImage = '' %}
+
+        {% if template contains 'product' %}
+          {% assign pinterestImage = product.featured_image | product_img_url: 'grande' %}
+        {% elsif template contains 'article' %}
+          {% assign img_tag = '<' | append: 'img' %}
+          {% if article.content contains img_tag %}
+            {% assign src = article.content | split: 'src="' %}
+            {% assign src = src[1] | split: '"' | first %}
+            {% assign pinterestImage = src %}
+          {% endif %}
+        {% else %}
+          {% if settings.use-logo and pinterestImage == '' %}
+            {% assign pinterestImage = 'logo.png' | asset_url %}
+          {% endif %}
+        {% endif %}
+      {% endif %}
+
+      <a class="footer-share-icon footer-tweet" href="//twitter.com/share?url={{ shop.url }}" target="_blank">{{ 'general.social.twitter' | t }}</a>
+      <a class="footer-share-icon footer-like" href="//www.facebook.com/sharer.php?u={{ shop.url }}" target="_blank">{{ 'general.social.facebook' | t }}</a>
+      <a class="footer-share-icon footer-pin" href="//pinterest.com/pin/create/button/?url={{ shop.url }}&amp;media={{ pinterestImage }}&amp;description={{ shop.name }}" target="_blank">{{ 'general.social.pinterest' | t }}</a>
+      <a class="footer-share-icon footer-plus" href="//plus.google.com/share?url={{ shop.url }}" target="_blank">{{ 'general.social.google' | t }}</a>
+      <a class="footer-share-icon footer-fancy" href="//www.thefancy.com/fancyit?ItemURL={{ shop.url }}&amp;Title={{ shop.name }}" target="_blank">{{ 'general.social.fancy' | t }}</a>
+    </div>
+    {% endif %}
+
+    <div role="contentinfo" class="copyright footer-module">
+      {% capture year %}{{ "now" | date: "%Y" }}{% endcapture %}
+      <p>{{ 'general.general.copyright_text_html' | t: year: year }}<br>
+        <a href="http://www.pixelunion.net/themes/shopify/startup">Startup theme</a> by <a href="https://www.pixelunion.net">Pixel Union</a>. {{ powered_by_link }}.</p>
+    </div>
+
+    {% if shop.enabled_payment_types.size > 0 and settings.footer-show-payment-options %}
+      <div class="payment-options footer-module">
+        {% for type in shop.enabled_payment_types %}
+          {% assign cardIcon = type | replace: '_','-' %}
+          {% case cardIcon %}
+            {% when 'diners-club' %}
+              <span class="{{ cardIcon }}">&#58131;</span>
+            {% when 'maestro' %}
+              <span class="{{ cardIcon }}">&#58130;</span>
+            {% when 'visa' %}
+              <span class="{{ cardIcon }}">&#58113;</span>
+            {% when 'master' %}
+              <span class="{{ cardIcon }}">&#58114;</span>
+            {% when 'discover' %}
+              <span class="{{ cardIcon }}">&#58117;</span>
+            {% when 'dankort' %}
+              <span class="{{ cardIcon }}">&#58128;</span>
+            {% when 'american-express' %}
+              <span class="{{ cardIcon }}">&#58115;</span>
+            {% when 'google-wallet' %}
+              <span class="{{ cardIcon }}">&#58121;</span>
+            {% when 'paypal' %}
+              <span class="{{ cardIcon }}">&#58116;</span>
+            {% when 'jcb' %}
+              <span class="{{ cardIcon }}">&#58129;</span>
+            {% when 'stripe' %}
+              <span class="{{ cardIcon }}">&#58118;</span>
+            {% when 'bitcoin' %}
+              <span class="{{ cardIcon }}">&#58132;</span>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </footer>
+
+</div>

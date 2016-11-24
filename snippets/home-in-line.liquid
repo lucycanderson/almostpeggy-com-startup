@@ -1,0 +1,87 @@
+<div class="home-module-wrapper {{ settings.home-in-line-style }}">
+  <div class="home-module home-in-line-features">
+    {% if settings.home-in-line-heading != blank %}
+      <h3 class="section-title">{{ settings.home-in-line-heading }}</h3>
+    {% else %}
+      {% unless settings.home-show-in-line-1 or settings.home-show-in-line-2 or settings.home-show-in-line-3 or settings.home-show-in-line-4 or settings.home-show-in-line-5 or settings.home-show-in-line-6 %}
+        <h3 class="section-title">{{ 'onboarding.inline_features_section.section_title' | t }}</h3>
+      {% endunless %}
+    {% endif %}
+
+    {% for i in (1..6) %}
+      {% capture feature %}home-show-in-line-{{ i }}{% endcapture %}
+      {% if settings[feature] %}
+
+        {% capture heading %}home-in-line-{{ i }}-title{% endcapture %}
+        {% capture caption %}home-in-line-{{ i }}-text{% endcapture %}
+        {% capture image %}home-in-line-image-{{ i }}.png{% endcapture %}
+        {% capture url %}home-in-line-{{ i }}-url{% endcapture %}
+        {% capture cta %}home-in-line-{{ i }}-cta{% endcapture %}
+
+        <div class="home-in-line-feature clearfix">
+
+          {% if settings.home-show-in-line-images %}
+            <img alt="{{ settings[heading] | strip_html | escape }}" src="{{ image | asset_url }}">
+          {% endif %}
+
+          <div class="home-in-line-text">
+            {% if settings[heading] != blank %}
+              <h3>{{ settings[heading] }}</h3>
+            {% endif %}
+
+            {% if settings[caption] != blank %}
+              <div class="rte">
+                {{ settings[caption] }}
+              </div>
+            {% endif %}
+
+            {% if settings[url] != blank and settings[cta] != blank %}
+              <p class="home-in-line-cta"><a href="{{ settings[url] }}">{{ settings[cta] }}</a></p>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% unless settings.home-show-in-line-1 or settings.home-show-in-line-2 or settings.home-show-in-line-3 or settings.home-show-in-line-4 or settings.home-show-in-line-5 or settings.home-show-in-line-6 %}
+    <div class="home-in-line-feature clearfix">
+
+      <img class="home-helper-image" alt="" src="{{ 'no-image.svg' | asset_url }}" onerror="this.src='{{'no-image.png' | asset_url}}';this.onerror=null;">
+
+      <div class="home-in-line-text">
+        <h3>{{ 'onboarding.inline_features_section.first_feature_title' | t }}</h3>
+
+        <div class="rte">
+          {{ 'onboarding.inline_features_section.text' | t }}
+        </div>
+      </div>
+    </div>
+
+    <div class="home-in-line-feature clearfix">
+
+      <img class="home-helper-image" alt="" src="{{ 'no-image.svg' | asset_url }}" onerror="this.src='{{'no-image.png' | asset_url}}';this.onerror=null;">
+
+      <div class="home-in-line-text">
+        <h3>{{ 'onboarding.inline_features_section.second_feature_title' | t }}</h3>
+
+        <div class="rte">
+          {{ 'onboarding.inline_features_section.text' | t }}
+        </div>
+      </div>
+    </div>
+
+    <div class="home-in-line-feature clearfix">
+
+      <img class="home-helper-image" alt="" src="{{ 'no-image.svg' | asset_url }}" onerror="this.src='{{'no-image.png' | asset_url}}';this.onerror=null;">
+
+      <div class="home-in-line-text">
+        <h3>{{ 'onboarding.inline_features_section.third_feature_title' | t }}</h3>
+
+        <div class="rte">
+          {{ 'onboarding.inline_features_section.text' | t }}
+        </div>
+      </div>
+    </div>
+    {% endunless %}
+  </div>
+</div>
